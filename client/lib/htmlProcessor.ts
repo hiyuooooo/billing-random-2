@@ -132,12 +132,18 @@ export class HtmlProcessor {
    */
   addFooterDeclaration(config: FooterConfig): this {
     const body = this.doc.querySelector("body");
-    if (!body) return this;
+    console.log("Found body:", body);
+    if (!body) {
+      console.log("No body found!");
+      return this;
+    }
 
     // Remove existing footer notes to prevent duplicates
     body
       .querySelectorAll(".footer-declaration, .custom-footer-note")
       .forEach((el) => el.remove());
+
+    console.log("Adding footer info:", config);
 
     if (config.showDeclaration) {
       const footerDiv = this.doc.createElement("div");
@@ -146,6 +152,7 @@ export class HtmlProcessor {
         "text-align:center; margin-top: 40px; font-size: 14px; font-style: italic; color: #555; border-top: 1px solid #ddd; padding-top: 20px;";
       footerDiv.textContent = config.declaration;
       body.appendChild(footerDiv); // Similar to soup.body.append() in BeautifulSoup
+      console.log("Added declaration:", config.declaration);
     }
 
     if (config.showCustomNote && config.customNote) {
@@ -155,6 +162,7 @@ export class HtmlProcessor {
         "text-align:center; margin-top: 20px; font-size: 12px; color: #666;";
       customNoteDiv.textContent = config.customNote;
       body.appendChild(customNoteDiv);
+      console.log("Added custom note:", config.customNote);
     }
 
     return this;
