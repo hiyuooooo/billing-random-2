@@ -27,6 +27,7 @@ import { cn } from "@/lib/utils";
 
 export default function BillBlocker() {
   const { activeAccount } = useAccount();
+  const { bills } = useBill();
 
   const [startingBillNumber, setStartingBillNumber] = useState(() => {
     if (!activeAccount) return "1001";
