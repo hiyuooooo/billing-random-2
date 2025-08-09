@@ -862,22 +862,19 @@ export default function Bills() {
       parseInt(newBill.billNumber) ||
       Math.max(...bills.map((b) => b.billNumber)) + 1;
 
+    const generatedTotal = selectedItems.reduce((sum, item) => sum + item.total, 0);
+
     const bill: any = {
       id: `BILL-${billNumber}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       billNumber: billNumber,
       date: new Date(newBill.date).toLocaleDateString("en-GB"),
       customerName: displayName,
       items: selectedItems,
-      subTotal: selectedItems.reduce((sum, item) => sum + item.total, 0),
-      expectedTotal:
-        parseFloat(newBill.targetTotal) ||
-        selectedItems.reduce((sum, item) => sum + item.total, 0),
+      subTotal: generatedTotal,
+      expectedTotal: generatedTotal, // Set expected total = generated total for no mismatch
       paymentMode,
       status: "draft",
-      difference:
-        (parseFloat(newBill.targetTotal) ||
-          selectedItems.reduce((sum, item) => sum + item.total, 0)) -
-        selectedItems.reduce((sum, item) => sum + item.total, 0),
+      difference: 0, // No difference since expected = generated
       tolerance: 0,
       headerInfo: {
         agencyName: "Sadhana Agency",
