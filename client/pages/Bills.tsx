@@ -884,6 +884,7 @@ export default function Bills() {
       parseInt(newBill.billNumber) ||
       Math.max(...bills.map((b) => b.billNumber)) + 1;
 
+    const targetTotal = parseFloat(newBill.targetTotal) || 0;
     const generatedTotal = selectedItems.reduce((sum, item) => sum + item.total, 0);
 
     const bill: any = {
@@ -892,11 +893,11 @@ export default function Bills() {
       date: new Date(newBill.date).toLocaleDateString("en-GB"),
       customerName: displayName,
       items: selectedItems,
-      subTotal: generatedTotal,
-      expectedTotal: generatedTotal, // Set expected total = generated total for no mismatch
+      subTotal: targetTotal > 0 ? targetTotal : generatedTotal, // Use target total if available
+      expectedTotal: targetTotal > 0 ? targetTotal : generatedTotal, // Use target total if available
       paymentMode,
       status: "draft",
-      difference: 0, // No difference since expected = generated
+      difference: 0, // No difference since we match the target exactly
       tolerance: 0,
       headerInfo: {
         agencyName: "Sadhana Agency",
