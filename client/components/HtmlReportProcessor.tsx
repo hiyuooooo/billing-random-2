@@ -96,6 +96,69 @@ export default function HtmlReportProcessor() {
 
   const [processedHtml, setProcessedHtml] = useState("");
 
+  // Save header config to localStorage whenever it changes
+  useEffect(() => {
+    if (activeAccount) {
+      try {
+        const storageKey = `htmlProcessor_header_${activeAccount.id}`;
+        localStorage.setItem(storageKey, JSON.stringify(headerConfig));
+      } catch (error) {
+        console.warn("Failed to save header config:", error);
+      }
+    }
+  }, [headerConfig, activeAccount]);
+
+  // Save footer config to localStorage whenever it changes
+  useEffect(() => {
+    if (activeAccount) {
+      try {
+        const storageKey = `htmlProcessor_footer_${activeAccount.id}`;
+        localStorage.setItem(storageKey, JSON.stringify(footerConfig));
+      } catch (error) {
+        console.warn("Failed to save footer config:", error);
+      }
+    }
+  }, [footerConfig, activeAccount]);
+
+  // Load settings when account changes
+  useEffect(() => {
+    if (activeAccount) {
+      try {
+        const headerKey = `htmlProcessor_header_${activeAccount.id}`;
+        const footerKey = `htmlProcessor_footer_${activeAccount.id}`;
+
+        const savedHeader = localStorage.getItem(headerKey);
+        const savedFooter = localStorage.getItem(footerKey);
+
+        if (savedHeader) {
+          setHeaderConfig(JSON.parse(savedHeader));
+        } else {
+          setHeaderConfig({
+            address: "",
+            phone: "",
+            gst: "",
+            showAddress: true,
+            showPhone: true,
+            showGST: true,
+          });
+        }
+
+        if (savedFooter) {
+          setFooterConfig(JSON.parse(savedFooter));
+        } else {
+          setFooterConfig({
+            declaration: "",
+            showDeclaration: true,
+            customNote: "",
+            showCustomNote: false,
+          });
+        }
+      } catch (error) {
+        console.warn("Failed to load processor configs:", error);
+      }
+    }
+  }, [activeAccount?.id]);
+
   // HTML manipulation using BeautifulSoup-like utilities
   const processHtmlContent = (htmlContent: string): string => {
     return HtmlProcessor.processHtml(
