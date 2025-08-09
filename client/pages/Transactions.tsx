@@ -205,6 +205,22 @@ export default function Transactions() {
   const [startingBillNumber, setStartingBillNumber] = useState("");
   const [billsToBlock, setBillsToBlock] = useState("");
 
+  // Set default starting bill number to highest existing bill number + 1
+  useEffect(() => {
+    if (bills.length > 0) {
+      const highestBillNumber = Math.max(...bills.map((bill) => bill.billNumber));
+      const nextBillNumber = highestBillNumber + 1;
+
+      // Only set if startingBillNumber is empty (don't override manual changes)
+      if (!startingBillNumber) {
+        setStartingBillNumber(nextBillNumber.toString());
+      }
+    } else if (!startingBillNumber) {
+      // If no bills exist, start with 1001 as default
+      setStartingBillNumber("1001");
+    }
+  }, [bills, activeAccount]); // Reset when account changes too
+
   // Load blocked bills from Bill Blocker when component mounts
   const loadBlockedBills = () => {
     try {
