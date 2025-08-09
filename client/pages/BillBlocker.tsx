@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { useAccount } from "@/components/AccountManager";
+import { useBill } from "@/components/BillContext";
 import { Button } from "@/components/ui/button";
 import {
   Card,
