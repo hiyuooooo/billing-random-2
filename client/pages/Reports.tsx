@@ -925,7 +925,7 @@ export default function Reports() {
               <div>
                 <h3 className="text-lg font-semibold">Billing Mismatches</h3>
                 <p className="text-sm text-muted-foreground">
-                  Bills with differences greater than ₹25 between expected and
+                  Bills with differences greater than ₹5 between expected and
                   generated totals
                 </p>
               </div>
