@@ -689,11 +689,11 @@ export function BillProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      // Check tolerance constraint (±30)
+      // Check tolerance constraint (±5 for better accuracy)
       const difference = Math.abs(currentTotal - targetTotal);
-      if (difference > 30) {
+      if (difference > 5) {
         console.warn(
-          `Bill ${currentBillNumber} exceeds ±30 tolerance: difference ${difference}`,
+          `Bill ${currentBillNumber} exceeds ±5 tolerance: difference ${difference}`,
         );
         console.log(
           "Target:",
@@ -704,18 +704,45 @@ export function BillProvider({ children }: { children: React.ReactNode }) {
           selectedItems.length,
         );
 
-        // Try one more time with different approach if tolerance exceeded
-        const retryResult = generateOptimalBillItems(
+        // Try multiple retries with different approaches if tolerance exceeded
+        let bestRetryResult = { items: selectedItems, total: currentTotal };
+        let bestRetryDiff = difference;
+
+        // Retry 1: Don't avoid previous items
+        const retryResult1 = generateOptimalBillItems(
           targetTotal,
           stockToUse,
           [], // Don't avoid previous items on retry
         );
+        const retry1Diff = Math.abs(retryResult1.total - targetTotal);
+        if (retry1Diff < bestRetryDiff) {
+          bestRetryResult = retryResult1;
+          bestRetryDiff = retry1Diff;
+        }
 
-        if (Math.abs(retryResult.total - targetTotal) < difference) {
-          selectedItems = retryResult.items;
-          currentTotal = retryResult.total;
+        // Retry 2: Use only high-value items for large targets
+        if (targetTotal > 300) {
+          const highValueItems = stockToUse.filter((item) => item.price > 50 && item.availableQuantity > 0);
+          if (highValueItems.length >= 2) {
+            const retryResult2 = generateOptimalBillItems(
+              targetTotal,
+              highValueItems,
+              [],
+            );
+            const retry2Diff = Math.abs(retryResult2.total - targetTotal);
+            if (retry2Diff < bestRetryDiff) {
+              bestRetryResult = retryResult2;
+              bestRetryDiff = retry2Diff;
+            }
+          }
+        }
+
+        // Use the best retry result
+        if (bestRetryDiff < difference) {
+          selectedItems = bestRetryResult.items;
+          currentTotal = bestRetryResult.total;
           console.log(
-            `Retry improved result: ${retryResult.total} (diff: ${Math.abs(retryResult.total - targetTotal)})`,
+            `Retry improved result: ${bestRetryResult.total} (diff: ${bestRetryDiff})`,
           );
         }
       }
