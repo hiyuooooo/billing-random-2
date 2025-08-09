@@ -77,12 +77,18 @@ export class HtmlProcessor {
    */
   addHeaderInfo(config: HeaderConfig): this {
     const headerDiv = this.doc.querySelector(".header");
-    if (!headerDiv) return this;
+    console.log("Found header div:", headerDiv);
+    if (!headerDiv) {
+      console.log("No header div found!");
+      return this;
+    }
 
     // Remove existing address lines to prevent duplicates
     headerDiv
       .querySelectorAll(".address-line, .phone-line, .gst-line")
       .forEach((el) => el.remove());
+
+    console.log("Adding header info:", config);
 
     if (config.showAddress) {
       const addressP = this.doc.createElement("p");
@@ -92,6 +98,7 @@ export class HtmlProcessor {
       addressP.style.color = "#666";
       addressP.textContent = config.address;
       headerDiv.appendChild(addressP); // Similar to header_div.append() in BeautifulSoup
+      console.log("Added address:", config.address);
     }
 
     if (config.showPhone) {
@@ -102,6 +109,7 @@ export class HtmlProcessor {
       phoneP.style.color = "#666";
       phoneP.textContent = `Phone: ${config.phone}`;
       headerDiv.appendChild(phoneP);
+      console.log("Added phone:", config.phone);
     }
 
     if (config.showGST) {
@@ -112,6 +120,7 @@ export class HtmlProcessor {
       gstP.style.color = "#666";
       gstP.textContent = `GST No: ${config.gst}`;
       headerDiv.appendChild(gstP);
+      console.log("Added GST:", config.gst);
     }
 
     return this;
