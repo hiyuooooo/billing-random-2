@@ -70,6 +70,21 @@ export default function BillBlocker() {
     }
   }, [startingBillNumber, activeAccount]);
 
+  // Auto-update starting bill number when bills change (but only if user hasn't manually set it)
+  useEffect(() => {
+    if (activeAccount && bills.length > 0) {
+      const storageKey = `billBlocker_startingNumber_${activeAccount.id}`;
+      const savedValue = localStorage.getItem(storageKey);
+
+      // Only auto-update if no manual value was saved
+      if (!savedValue) {
+        const highestBillNumber = Math.max(...bills.map((bill) => bill.billNumber));
+        const nextBillNumber = highestBillNumber + 1;
+        setStartingBillNumber(nextBillNumber.toString());
+      }
+    }
+  }, [bills, activeAccount]);
+
   useEffect(() => {
     if (activeAccount) {
       try {
