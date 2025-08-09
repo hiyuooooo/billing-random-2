@@ -947,7 +947,7 @@ export default function Reports() {
                       No Mismatches Found
                     </h3>
                     <p className="text-sm">
-                      All bills are within the ±₹25 tolerance range
+                      All bills are within the ±₹5 tolerance range
                     </p>
                   </div>
                 </CardContent>
