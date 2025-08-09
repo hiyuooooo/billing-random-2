@@ -2921,7 +2921,7 @@ export default function Bills() {
                             repeats
                           </li>
                           <li>• Ensures minimum 2 items per bill</li>
-                          <li>• Matches target total within ±₹30 tolerance</li>
+                          <li>• Expected total always equals generated total (no mismatch)</li>
                           <li>
                             • Maximum 7 items per bill, up to 2 quantity each
                           </li>
