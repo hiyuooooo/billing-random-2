@@ -407,7 +407,7 @@ export default function HtmlReportProcessor() {
                             address: e.target.value,
                           }))
                         }
-                        placeholder="Enter agency address..."
+                        placeholder="Enter agency address (will be saved in memory)..."
                         rows={2}
                       />
                     </div>
