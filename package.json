@@ -33,7 +33,11 @@
     "pack:exe:all": "npm run pack:prepare && pkg dist/server/node-build.mjs --targets node18-win-x64,node18-linux-x64,node18-macos-x64 --out-path executables",
     "build:web": "npm run build && npm run optimize:web",
     "optimize:web": "echo 'Web build optimized for deployment'",
-    "preview": "npm run build && npm start"
+    "preview": "npm run build && npm start",
+    "setup": "node install.js",
+    "build:all": "node build.js",
+    "build:exe": "node build.js exe",
+    "build:web-only": "node build.js web"
   },
   "dependencies": {
     "dotenv": "^17.2.0",
