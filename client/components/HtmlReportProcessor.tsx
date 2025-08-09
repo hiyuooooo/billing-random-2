@@ -557,7 +557,7 @@ export default function HtmlReportProcessor() {
                             customNote: e.target.value,
                           }))
                         }
-                        placeholder="Enter custom note..."
+                        placeholder="Enter custom note (will be saved)..."
                         rows={2}
                       />
                     </div>
