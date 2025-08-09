@@ -1189,8 +1189,11 @@ export default function Transactions() {
                   type="number"
                   value={startingBillNumber}
                   onChange={(e) => setStartingBillNumber(e.target.value)}
-                  placeholder="Enter starting bill number (e.g., 1001)"
+                  placeholder="Auto-set to next available (editable)"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Automatically set to highest bill number + 1, but you can change it manually
+                </p>
               </div>
 
               <div className="space-y-2">
