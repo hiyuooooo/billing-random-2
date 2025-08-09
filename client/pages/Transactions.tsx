@@ -208,7 +208,9 @@ export default function Transactions() {
   // Set default starting bill number to highest existing bill number + 1
   useEffect(() => {
     if (bills.length > 0) {
-      const highestBillNumber = Math.max(...bills.map((bill) => bill.billNumber));
+      const highestBillNumber = Math.max(
+        ...bills.map((bill) => bill.billNumber),
+      );
       const nextBillNumber = highestBillNumber + 1;
 
       // Only set if startingBillNumber is empty (don't override manual changes)
@@ -1192,7 +1194,8 @@ export default function Transactions() {
                   placeholder="Auto-set to next available (editable)"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Automatically set to highest bill number + 1, but you can change it manually
+                  Automatically set to highest bill number + 1, but you can
+                  change it manually
                 </p>
               </div>
 

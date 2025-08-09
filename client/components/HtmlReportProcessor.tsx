@@ -32,14 +32,15 @@ export default function HtmlReportProcessor() {
 
   // Load saved settings from localStorage or use empty defaults
   const [headerConfig, setHeaderConfig] = useState(() => {
-    if (!activeAccount) return {
-      address: "",
-      phone: "",
-      gst: "",
-      showAddress: true,
-      showPhone: true,
-      showGST: true,
-    };
+    if (!activeAccount)
+      return {
+        address: "",
+        phone: "",
+        gst: "",
+        showAddress: true,
+        showPhone: true,
+        showGST: true,
+      };
 
     try {
       const storageKey = `htmlProcessor_header_${activeAccount.id}`;
@@ -62,12 +63,13 @@ export default function HtmlReportProcessor() {
   });
 
   const [footerConfig, setFooterConfig] = useState(() => {
-    if (!activeAccount) return {
-      declaration: "",
-      showDeclaration: true,
-      customNote: "",
-      showCustomNote: false,
-    };
+    if (!activeAccount)
+      return {
+        declaration: "",
+        showDeclaration: true,
+        customNote: "",
+        showCustomNote: false,
+      };
 
     try {
       const storageKey = `htmlProcessor_footer_${activeAccount.id}`;

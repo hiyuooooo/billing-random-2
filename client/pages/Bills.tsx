@@ -845,7 +845,7 @@ export default function Bills() {
 
       // Find the item with the highest quantity to adjust
       const itemToAdjust = adjustedItems.reduce((max, item) =>
-        item.quantity > max.quantity ? item : max
+        item.quantity > max.quantity ? item : max,
       );
 
       if (itemToAdjust) {
@@ -857,7 +857,9 @@ export default function Bills() {
         // Recalculate total
         currentTotal = adjustedItems.reduce((sum, item) => sum + item.total, 0);
 
-        console.log(`Adjusted ${itemToAdjust.name} price to ₹${itemToAdjust.price.toFixed(2)}`);
+        console.log(
+          `Adjusted ${itemToAdjust.name} price to ₹${itemToAdjust.price.toFixed(2)}`,
+        );
         console.log(`New total: ₹${currentTotal}, target: ₹${targetTotal}`);
       }
     }
@@ -885,7 +887,10 @@ export default function Bills() {
       Math.max(...bills.map((b) => b.billNumber)) + 1;
 
     const targetTotal = parseFloat(newBill.targetTotal) || 0;
-    const generatedTotal = selectedItems.reduce((sum, item) => sum + item.total, 0);
+    const generatedTotal = selectedItems.reduce(
+      (sum, item) => sum + item.total,
+      0,
+    );
 
     const bill: any = {
       id: `BILL-${billNumber}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -2944,7 +2949,9 @@ export default function Bills() {
                             repeats
                           </li>
                           <li>• Ensures minimum 2 items per bill</li>
-                          <li>• Generated total exactly matches target amount</li>
+                          <li>
+                            • Generated total exactly matches target amount
+                          </li>
                           <li>
                             • Maximum 7 items per bill, up to 2 quantity each
                           </li>

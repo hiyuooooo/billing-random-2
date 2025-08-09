@@ -38,7 +38,9 @@ export default function BillBlocker() {
 
       // If no saved value, use highest bill number + 1
       if (bills.length > 0) {
-        const highestBillNumber = Math.max(...bills.map((bill) => bill.billNumber));
+        const highestBillNumber = Math.max(
+          ...bills.map((bill) => bill.billNumber),
+        );
         return (highestBillNumber + 1).toString();
       }
       return "1001";
@@ -78,7 +80,9 @@ export default function BillBlocker() {
 
       // Only auto-update if no manual value was saved
       if (!savedValue) {
-        const highestBillNumber = Math.max(...bills.map((bill) => bill.billNumber));
+        const highestBillNumber = Math.max(
+          ...bills.map((bill) => bill.billNumber),
+        );
         const nextBillNumber = highestBillNumber + 1;
         setStartingBillNumber(nextBillNumber.toString());
       }

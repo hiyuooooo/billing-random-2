@@ -386,20 +386,23 @@ export function BillProvider({ children }: { children: React.ReactNode }) {
           const newTotal = currentTotal + itemCost;
 
           // Be more lenient for the first 2 items to ensure minimum requirement
-        const currentTolerance =
-          selectedItems.length < 2 ? tolerance * 6 : tolerance;
+          const currentTolerance =
+            selectedItems.length < 2 ? tolerance * 6 : tolerance;
 
-        // Check if this addition keeps us within bounds or gets us closer to target
-        if (newTotal <= targetTotal + currentTolerance) {
-          bestQty = qty;
-          bestQtyTotal = itemCost;
-        } else if (Math.abs(newTotal - targetTotal) < Math.abs(currentTotal - targetTotal)) {
-          // Accept this if it gets us closer to the target, even if slightly over tolerance
-          bestQty = qty;
-          bestQtyTotal = itemCost;
-        } else {
-          break; // Don't add if it moves us further from target
-        }
+          // Check if this addition keeps us within bounds or gets us closer to target
+          if (newTotal <= targetTotal + currentTolerance) {
+            bestQty = qty;
+            bestQtyTotal = itemCost;
+          } else if (
+            Math.abs(newTotal - targetTotal) <
+            Math.abs(currentTotal - targetTotal)
+          ) {
+            // Accept this if it gets us closer to the target, even if slightly over tolerance
+            bestQty = qty;
+            bestQtyTotal = itemCost;
+          } else {
+            break; // Don't add if it moves us further from target
+          }
         }
 
         // Add the item if we found a valid quantity
@@ -722,7 +725,9 @@ export function BillProvider({ children }: { children: React.ReactNode }) {
 
         // Retry 2: Use only high-value items for large targets
         if (targetTotal > 300) {
-          const highValueItems = stockToUse.filter((item) => item.price > 50 && item.availableQuantity > 0);
+          const highValueItems = stockToUse.filter(
+            (item) => item.price > 50 && item.availableQuantity > 0,
+          );
           if (highValueItems.length >= 2) {
             const retryResult2 = generateOptimalBillItems(
               targetTotal,

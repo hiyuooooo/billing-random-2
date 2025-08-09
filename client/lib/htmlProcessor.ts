@@ -143,7 +143,11 @@ export class HtmlProcessor {
       body.appendChild(footerDiv); // Similar to soup.body.append() in BeautifulSoup
     }
 
-    if (config.showCustomNote && config.customNote && config.customNote.trim()) {
+    if (
+      config.showCustomNote &&
+      config.customNote &&
+      config.customNote.trim()
+    ) {
       const customNoteDiv = this.doc.createElement("div");
       customNoteDiv.className = "custom-footer-note";
       customNoteDiv.style.cssText =
