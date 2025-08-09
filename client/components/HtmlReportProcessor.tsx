@@ -468,7 +468,7 @@ export default function HtmlReportProcessor() {
                             gst: e.target.value,
                           }))
                         }
-                        placeholder="Enter GST number..."
+                        placeholder="Enter GST number (will be saved)..."
                       />
                     </div>
                   )}
