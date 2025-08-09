@@ -176,9 +176,9 @@ export default function Reports() {
     navigate(`/bills?highlight=${billNumber}&edit=true`);
   };
 
-  // Filter bill reports based on mismatch threshold (reduced to ±5 for better accuracy)
+  // Filter bill reports based on mismatch threshold
   const mismatchReports = useMemo(() => {
-    return bills.filter((bill) => Math.abs(bill.difference) > 5);
+    return bills.filter((bill) => Math.abs(bill.difference) > 20);
   }, [bills]);
 
   const filteredBillReports = useMemo(() => {
