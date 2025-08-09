@@ -78,6 +78,8 @@ export default function HtmlReportProcessor() {
           .items-table th { background-color: #f2f2f2; }
           .total-row { font-weight: bold; background-color: #f9f9f9; }
           .grand-total { font-size: 18px; font-weight: bold; text-align: center; margin-top: 30px; padding: 15px; background-color: #e7f3ff; }
+          .address-line, .phone-line, .gst-line { font-size: 14px; margin-top: 5px; color: #666; }
+          .footer-declaration, .custom-footer-note { text-align: center; margin-top: 20px; font-size: 14px; color: #555; }
           @media print {
             .bill-section {
               page-break-after: auto;
@@ -90,6 +92,7 @@ export default function HtmlReportProcessor() {
         <div class="header">
           <h2>Mega Sale Report</h2>
           <h3>Sadhana Agency</h3>
+          <!-- Header info will be added by processor -->
         </div>
 
         ${bills
