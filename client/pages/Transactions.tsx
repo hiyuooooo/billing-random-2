@@ -170,7 +170,7 @@ export default function Transactions() {
       deleteAllTransactions();
     }
   };
-  const { generateBillsFromTransactions } = useBill();
+  const { generateBillsFromTransactions, bills } = useBill();
   const { getUnblockedStock, reduceStock } = useStock();
   const { activeAccount, accounts, setActiveAccount } = useAccount();
 
