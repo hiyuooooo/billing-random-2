@@ -739,7 +739,7 @@ export default function Reports() {
               <div className="flex items-center space-x-2">
                 <AlertTriangle className="h-4 w-4 text-orange-500" />
                 <div>
-                  <p className="text-sm font-medium">Mismatches (Above ₹25)</p>
+                  <p className="text-sm font-medium">Mismatches (Above ₹5)</p>
                   <p className="text-2xl font-bold">{mismatchReports.length}</p>
                 </div>
               </div>
