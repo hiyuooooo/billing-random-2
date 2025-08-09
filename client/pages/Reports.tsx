@@ -876,7 +876,7 @@ export default function Reports() {
                           key={`billing-report-${bill.id}-${index}`}
                           className={cn(
                             "border-b hover:bg-accent/50 transition-colors",
-                            Math.abs(bill.difference) > 5 &&
+                            Math.abs(bill.difference) > 20 &&
                               "bg-red-50 border-red-200",
                           )}
                         >
