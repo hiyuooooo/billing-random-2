@@ -527,7 +527,7 @@ export default function HtmlReportProcessor() {
                             declaration: e.target.value,
                           }))
                         }
-                        placeholder="Enter GST declaration..."
+                        placeholder="Enter GST declaration (will be saved)..."
                         rows={2}
                       />
                     </div>
