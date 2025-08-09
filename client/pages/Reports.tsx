@@ -900,12 +900,12 @@ export default function Reports() {
                           <td className="p-3">
                             <Badge
                               variant={
-                                Math.abs(bill.difference) > 5
+                                Math.abs(bill.difference) > 20
                                   ? "destructive"
                                   : "secondary"
                               }
                             >
-                              {Math.abs(bill.difference) > 5
+                              {Math.abs(bill.difference) > 20
                                 ? `${bill.difference > 0 ? "Under" : "Over"} ₹${Math.abs(bill.difference)}`
                                 : "Within Range"}
                             </Badge>
