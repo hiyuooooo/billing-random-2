@@ -263,7 +263,7 @@ export default function Reports() {
       "Expected Total": bill.expectedTotal,
       Difference: bill.difference,
       Status:
-        Math.abs(bill.difference) > 25
+        Math.abs(bill.difference) > 5
           ? bill.difference > 0
             ? "Under"
             : "Over"
