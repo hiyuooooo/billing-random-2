@@ -320,7 +320,7 @@ export function BillProvider({ children }: { children: React.ReactNode }) {
 
     let bestMatch: { items: BillItem[]; total: number } | null = null;
     let closestDiff = Infinity;
-    const tolerance = 30; // ±30 tolerance as per requirements
+    const tolerance = 5; // Reduced tolerance to ±5 for better accuracy
     let iterationsPerformed = 0;
 
     // Start iteration monitoring if bill number provided
