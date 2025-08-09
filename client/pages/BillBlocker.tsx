@@ -33,7 +33,15 @@ export default function BillBlocker() {
     if (!activeAccount) return "1001";
     try {
       const storageKey = `billBlocker_startingNumber_${activeAccount.id}`;
-      return localStorage.getItem(storageKey) || "1001";
+      const saved = localStorage.getItem(storageKey);
+      if (saved) return saved;
+
+      // If no saved value, use highest bill number + 1
+      if (bills.length > 0) {
+        const highestBillNumber = Math.max(...bills.map((bill) => bill.billNumber));
+        return (highestBillNumber + 1).toString();
+      }
+      return "1001";
     } catch {
       return "1001";
     }
