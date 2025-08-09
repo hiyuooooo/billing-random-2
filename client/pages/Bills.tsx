@@ -834,7 +834,35 @@ export default function Bills() {
     }
 
     console.log("Generated items:", result.items);
-    setSelectedItems(result.items);
+
+    // Adjust the total to exactly match the target
+    let adjustedItems = [...result.items];
+    let currentTotal = result.total;
+    const difference = targetTotal - currentTotal;
+
+    if (difference !== 0 && adjustedItems.length > 0) {
+      console.log(`Adjusting total by ₹${difference} to match target exactly`);
+
+      // Find the item with the highest quantity to adjust
+      const itemToAdjust = adjustedItems.reduce((max, item) =>
+        item.quantity > max.quantity ? item : max
+      );
+
+      if (itemToAdjust) {
+        // Adjust the price of the item to make the total exact
+        const priceAdjustment = difference / itemToAdjust.quantity;
+        itemToAdjust.price = Math.max(1, itemToAdjust.price + priceAdjustment);
+        itemToAdjust.total = itemToAdjust.price * itemToAdjust.quantity;
+
+        // Recalculate total
+        currentTotal = adjustedItems.reduce((sum, item) => sum + item.total, 0);
+
+        console.log(`Adjusted ${itemToAdjust.name} price to ₹${itemToAdjust.price.toFixed(2)}`);
+        console.log(`New total: ₹${currentTotal}, target: ₹${targetTotal}`);
+      }
+    }
+
+    setSelectedItems(adjustedItems);
 
     // Switch back to bills tab after a short delay to show the result
     setTimeout(() => {
@@ -842,16 +870,10 @@ export default function Bills() {
     }, 1000);
 
     // Provide feedback about the generation
-    const difference = Math.abs(result.total - targetTotal);
+    const finalDifference = Math.abs(currentTotal - targetTotal);
     console.log(
-      `Bill generated with ${result.items.length} items, total: ₹${result.total}, difference from target: ₹${difference}`,
+      `Bill generated with ${adjustedItems.length} items, total: ₹${currentTotal}, target: ₹${targetTotal}, difference: ₹${finalDifference}`,
     );
-
-    if (difference > 30) {
-      console.warn(
-        `Generated bill total (₹${result.total}) differs from target (₹${targetTotal}) by ₹${difference}`,
-      );
-    }
   };
 
   const handleCreateBill = () => {
