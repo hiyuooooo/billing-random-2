@@ -125,9 +125,7 @@ export class HtmlProcessor {
    */
   addFooterDeclaration(config: FooterConfig): this {
     const body = this.doc.querySelector("body");
-    console.log("Found body:", body);
     if (!body) {
-      console.log("No body found!");
       return this;
     }
 
@@ -136,26 +134,22 @@ export class HtmlProcessor {
       .querySelectorAll(".footer-declaration, .custom-footer-note")
       .forEach((el) => el.remove());
 
-    console.log("Adding footer info:", config);
-
-    if (config.showDeclaration) {
+    if (config.showDeclaration && config.declaration.trim()) {
       const footerDiv = this.doc.createElement("div");
       footerDiv.className = "footer-declaration";
       footerDiv.style.cssText =
         "text-align:center; margin-top: 40px; font-size: 14px; font-style: italic; color: #555; border-top: 1px solid #ddd; padding-top: 20px;";
       footerDiv.textContent = config.declaration;
       body.appendChild(footerDiv); // Similar to soup.body.append() in BeautifulSoup
-      console.log("Added declaration:", config.declaration);
     }
 
-    if (config.showCustomNote && config.customNote) {
+    if (config.showCustomNote && config.customNote && config.customNote.trim()) {
       const customNoteDiv = this.doc.createElement("div");
       customNoteDiv.className = "custom-footer-note";
       customNoteDiv.style.cssText =
         "text-align:center; margin-top: 20px; font-size: 12px; color: #666;";
       customNoteDiv.textContent = config.customNote;
       body.appendChild(customNoteDiv);
-      console.log("Added custom note:", config.customNote);
     }
 
     return this;
