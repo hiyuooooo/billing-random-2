@@ -268,13 +268,7 @@ export default function HtmlReportProcessor() {
       }
 
       const baseHtml = generateBaseHtmlReport();
-      console.log("Base HTML generated:", baseHtml.substring(0, 500));
-      console.log("Header config:", headerConfig);
-      console.log("Footer config:", footerConfig);
-      console.log("Processing config:", processingConfig);
-
       const processed = processHtmlContent(baseHtml);
-      console.log("Processed HTML:", processed.substring(0, 500));
       setProcessedHtml(processed);
 
       console.log("HTML report processed successfully!");
