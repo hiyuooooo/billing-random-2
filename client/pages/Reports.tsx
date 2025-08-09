@@ -847,7 +847,7 @@ export default function Reports() {
                 <CardTitle>Billing Report</CardTitle>
                 <CardDescription>
                   Expected vs Generated totals with mismatch highlighting (Above
-                  ₹25 difference)
+                  ₹5 difference)
                 </CardDescription>
               </CardHeader>
               <CardContent>
