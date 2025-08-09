@@ -437,7 +437,7 @@ export default function HtmlReportProcessor() {
                             phone: e.target.value,
                           }))
                         }
-                        placeholder="Enter phone number..."
+                        placeholder="Enter phone number (will be saved)..."
                       />
                     </div>
                   )}
