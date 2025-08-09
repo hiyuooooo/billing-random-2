@@ -339,9 +339,12 @@ export default function BillBlocker() {
                   type="number"
                   value={startingBillNumber}
                   onChange={(e) => setStartingBillNumber(e.target.value)}
-                  placeholder="Enter starting bill number"
+                  placeholder="Auto-set to next available"
                   className="w-48"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Auto-set to highest bill + 1, but editable
+                </p>
               </div>
               <div className="text-sm text-muted-foreground">
                 <p>
