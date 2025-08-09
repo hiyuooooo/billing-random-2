@@ -77,9 +77,7 @@ export class HtmlProcessor {
    */
   addHeaderInfo(config: HeaderConfig): this {
     const headerDiv = this.doc.querySelector(".header");
-    console.log("Found header div:", headerDiv);
     if (!headerDiv) {
-      console.log("No header div found!");
       return this;
     }
 
@@ -88,9 +86,7 @@ export class HtmlProcessor {
       .querySelectorAll(".address-line, .phone-line, .gst-line")
       .forEach((el) => el.remove());
 
-    console.log("Adding header info:", config);
-
-    if (config.showAddress) {
+    if (config.showAddress && config.address.trim()) {
       const addressP = this.doc.createElement("p");
       addressP.className = "address-line";
       addressP.style.fontSize = "14px";
@@ -98,10 +94,9 @@ export class HtmlProcessor {
       addressP.style.color = "#666";
       addressP.textContent = config.address;
       headerDiv.appendChild(addressP); // Similar to header_div.append() in BeautifulSoup
-      console.log("Added address:", config.address);
     }
 
-    if (config.showPhone) {
+    if (config.showPhone && config.phone.trim()) {
       const phoneP = this.doc.createElement("p");
       phoneP.className = "phone-line";
       phoneP.style.fontSize = "14px";
@@ -109,10 +104,9 @@ export class HtmlProcessor {
       phoneP.style.color = "#666";
       phoneP.textContent = `Phone: ${config.phone}`;
       headerDiv.appendChild(phoneP);
-      console.log("Added phone:", config.phone);
     }
 
-    if (config.showGST) {
+    if (config.showGST && config.gst.trim()) {
       const gstP = this.doc.createElement("p");
       gstP.className = "gst-line";
       gstP.style.fontSize = "14px";
@@ -120,7 +114,6 @@ export class HtmlProcessor {
       gstP.style.color = "#666";
       gstP.textContent = `GST No: ${config.gst}`;
       headerDiv.appendChild(gstP);
-      console.log("Added GST:", config.gst);
     }
 
     return this;
