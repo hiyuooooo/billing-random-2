@@ -386,16 +386,20 @@ export function BillProvider({ children }: { children: React.ReactNode }) {
           const newTotal = currentTotal + itemCost;
 
           // Be more lenient for the first 2 items to ensure minimum requirement
-          const currentTolerance =
-            selectedItems.length < 2 ? tolerance * 2 : tolerance;
+        const currentTolerance =
+          selectedItems.length < 2 ? tolerance * 6 : tolerance;
 
-          // Check if this addition keeps us within bounds
-          if (newTotal <= targetTotal + currentTolerance) {
-            bestQty = qty;
-            bestQtyTotal = itemCost;
-          } else {
-            break; // Don't exceed target + tolerance
-          }
+        // Check if this addition keeps us within bounds or gets us closer to target
+        if (newTotal <= targetTotal + currentTolerance) {
+          bestQty = qty;
+          bestQtyTotal = itemCost;
+        } else if (Math.abs(newTotal - targetTotal) < Math.abs(currentTotal - targetTotal)) {
+          // Accept this if it gets us closer to the target, even if slightly over tolerance
+          bestQty = qty;
+          bestQtyTotal = itemCost;
+        } else {
+          break; // Don't add if it moves us further from target
+        }
         }
 
         // Add the item if we found a valid quantity
