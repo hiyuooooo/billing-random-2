@@ -7,7 +7,9 @@ const port = process.env.PORT || 3000;
 
 // In production, serve the built SPA files
 // For pkg compatibility, use process.cwd() or __dirname
-const __dirname = process.pkg ? path.dirname(process.execPath) : import.meta.dirname;
+const __dirname = process.pkg
+  ? path.dirname(process.execPath)
+  : import.meta.dirname;
 const distPath = process.pkg
   ? path.join(path.dirname(process.execPath), "spa")
   : path.join(__dirname, "../spa");

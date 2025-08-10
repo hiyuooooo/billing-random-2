@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import { execSync } from 'child_process';
-import path from 'path';
-import fs from 'fs';
-import { promisify } from 'util';
+import { execSync } from "child_process";
+import path from "path";
+import fs from "fs";
+import { promisify } from "util";
 
 const copyFile = promisify(fs.copyFile);
 const mkdir = promisify(fs.mkdir);
@@ -13,11 +13,11 @@ const stat = promisify(fs.stat);
 async function copyDir(src, dest) {
   await mkdir(dest, { recursive: true });
   const entries = await readdir(src, { withFileTypes: true });
-  
+
   for (let entry of entries) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
-    
+
     if (entry.isDirectory()) {
       await copyDir(srcPath, destPath);
     } else {
@@ -27,32 +27,35 @@ async function copyDir(src, dest) {
 }
 
 async function buildExecutable() {
-  console.log('🔨 Building BillMaster Pro Executable...');
-  
+  console.log("🔨 Building BillMaster Pro Executable...");
+
   // 1. Build the application
-  console.log('📦 Building application...');
-  execSync('npm run build', { stdio: 'inherit' });
-  
+  console.log("📦 Building application...");
+  execSync("npm run build", { stdio: "inherit" });
+
   // 2. Create executable with pkg
-  console.log('⚙️  Creating executable...');
-  execSync('npx pkg dist/server/node-build.js --targets node18-win-x64 --out-path temp-exe', { stdio: 'inherit' });
-  
+  console.log("⚙️  Creating executable...");
+  execSync(
+    "npx pkg dist/server/node-build.js --targets node18-win-x64 --out-path temp-exe",
+    { stdio: "inherit" },
+  );
+
   // 3. Create final package directory
-  const packageDir = path.join(process.cwd(), 'BillMaster-Portable');
+  const packageDir = path.join(process.cwd(), "BillMaster-Portable");
   if (!fs.existsSync(packageDir)) {
     fs.mkdirSync(packageDir, { recursive: true });
   }
-  
+
   // 4. Copy executable
-  console.log('📁 Packaging files...');
+  console.log("📁 Packaging files...");
   fs.copyFileSync(
-    path.join('temp-exe', 'node-build.exe'),
-    path.join(packageDir, 'BillMaster.exe')
+    path.join("temp-exe", "node-build.exe"),
+    path.join(packageDir, "BillMaster.exe"),
   );
-  
+
   // 5. Copy SPA assets
-  await copyDir('dist/spa', path.join(packageDir, 'spa'));
-  
+  await copyDir("dist/spa", path.join(packageDir, "spa"));
+
   // 6. Create startup script
   const startupScript = `@echo off
 echo Starting BillMaster Pro...
@@ -61,9 +64,12 @@ echo.
 start http://localhost:8080
 BillMaster.exe
 pause`;
-  
-  fs.writeFileSync(path.join(packageDir, 'Start-BillMaster.bat'), startupScript);
-  
+
+  fs.writeFileSync(
+    path.join(packageDir, "Start-BillMaster.bat"),
+    startupScript,
+  );
+
   // 7. Create README
   const readme = `# BillMaster Pro - Portable Edition
 
@@ -95,15 +101,15 @@ pause`;
 All data is stored locally in your browser. 
 Close the command window to stop the application.
 `;
-  
-  fs.writeFileSync(path.join(packageDir, 'README.txt'), readme);
-  
+
+  fs.writeFileSync(path.join(packageDir, "README.txt"), readme);
+
   // 8. Clean up
-  fs.rmSync('temp-exe', { recursive: true, force: true });
-  
-  console.log('✅ Build complete!');
+  fs.rmSync("temp-exe", { recursive: true, force: true });
+
+  console.log("✅ Build complete!");
   console.log(`📂 Package location: ${packageDir}`);
-  console.log('🎉 Ready for distribution!');
+  console.log("🎉 Ready for distribution!");
 }
 
 buildExecutable().catch(console.error);

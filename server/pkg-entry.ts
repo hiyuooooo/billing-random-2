@@ -40,7 +40,7 @@ app.listen(port, () => {
   console.log(`📱 Frontend: http://localhost:${port}`);
   console.log(`🔧 API: http://localhost:${port}/api`);
   console.log(`📁 Assets: ${distPath}`);
-  console.log(`💻 Executable mode: ${process.pkg ? 'YES' : 'NO'}`);
+  console.log(`💻 Executable mode: ${process.pkg ? "YES" : "NO"}`);
 });
 
 // Graceful shutdown
