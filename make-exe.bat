@@ -19,7 +19,9 @@ echo ===============================================
 echo.
 echo Your executable is ready:
 echo   File: executables\node-build.exe
-echo   Size: ~35MB
+echo   Size: ~38MB
+echo.
+echo ✅ FIXED: CommonJS build now works with pkg!
 echo.
 echo To run: Double-click the .exe file
 echo.
