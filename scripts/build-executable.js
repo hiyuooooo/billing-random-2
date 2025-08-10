@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process');
-const path = require('path');
-const fs = require('fs');
-const { promisify } = require('util');
+import { execSync } from 'child_process';
+import path from 'path';
+import fs from 'fs';
+import { promisify } from 'util';
 
 const copyFile = promisify(fs.copyFile);
 const mkdir = promisify(fs.mkdir);
