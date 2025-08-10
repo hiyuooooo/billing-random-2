@@ -7,7 +7,6 @@
       "dist/spa/**/*"
     ],
     "scripts": [
-      "dist/server/**/*.mjs",
       "dist/server/**/*.js"
     ],
     "targets": [
