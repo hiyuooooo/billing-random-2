@@ -37,7 +37,8 @@
     "setup": "node install.js",
     "build:all": "node build.js",
     "build:exe": "node build.js exe",
-    "build:web-only": "node build.js web"
+    "build:web-only": "node build.js web",
+    "build:portable": "node scripts/build-executable.js"
   },
   "dependencies": {
     "dotenv": "^17.2.0",
