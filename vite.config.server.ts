@@ -7,7 +7,7 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, "server/pkg-entry.ts"),
       name: "server",
-      fileName: "node-build",
+      fileName: () => "node-build.js",
       formats: ["cjs"],
     },
     outDir: "dist/server",
