@@ -12,7 +12,7 @@ interface AccountConfig {
 
 export function createAccountServer(config: AccountConfig) {
   const app = createServer();
-  
+
   // Add account-specific middleware
   app.use((req, res, next) => {
     // Inject account configuration into requests
@@ -26,13 +26,13 @@ export function createAccountServer(config: AccountConfig) {
       accountId: config.accountId,
       accountName: config.accountName,
       port: config.port,
-      storagePrefix: config.storagePrefix
+      storagePrefix: config.storagePrefix,
     });
   });
 
   // Handle different environments
   let distPath: string;
-  
+
   if (process.pkg) {
     // When running as a pkg executable
     distPath = path.join(process.execPath, "..", "spa");
@@ -63,14 +63,16 @@ export function createAccountServer(config: AccountConfig) {
 
 export function startAccountServer(config: AccountConfig) {
   const app = createAccountServer(config);
-  
+
   const server = app.listen(config.port, () => {
-    console.log(`🏢 ${config.accountName} server running on port ${config.port}`);
+    console.log(
+      `🏢 ${config.accountName} server running on port ${config.port}`,
+    );
     console.log(`📱 Frontend: http://localhost:${config.port}`);
     console.log(`🔧 API: http://localhost:${config.port}/api`);
     console.log(`💾 Storage prefix: ${config.storagePrefix}`);
-    console.log(`💻 Executable mode: ${process.pkg ? 'YES' : 'NO'}`);
-    console.log(`${'='.repeat(50)}`);
+    console.log(`💻 Executable mode: ${process.pkg ? "YES" : "NO"}`);
+    console.log(`${"=".repeat(50)}`);
   });
 
   // Graceful shutdown

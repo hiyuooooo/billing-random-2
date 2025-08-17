@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface AccountInfo {
   accountId: string;
@@ -14,21 +14,23 @@ export function useAccountDetection() {
   useEffect(() => {
     async function detectAccount() {
       try {
-        const response = await fetch('/api/account-info');
+        const response = await fetch("/api/account-info");
         if (response.ok) {
           const info = await response.json();
           setAccountInfo(info);
-          
+
           // Set document title to include account name
           document.title = `BillMaster Pro - ${info.accountName}`;
-          
+
           // Add account-specific styling or data attributes
-          document.body.setAttribute('data-account', info.accountId);
-          
-          console.log(`🏢 Account detected: ${info.accountName} on port ${info.port}`);
+          document.body.setAttribute("data-account", info.accountId);
+
+          console.log(
+            `🏢 Account detected: ${info.accountName} on port ${info.port}`,
+          );
         }
       } catch (error) {
-        console.log('🔧 Running in development mode or single-account mode');
+        console.log("🔧 Running in development mode or single-account mode");
       } finally {
         setIsLoading(false);
       }
@@ -43,7 +45,7 @@ export function useAccountDetection() {
 // Helper hook to get account-specific localStorage key
 export function useAccountStorage(key: string) {
   const { accountInfo } = useAccountDetection();
-  
+
   const getStorageKey = (baseKey: string) => {
     if (accountInfo?.storagePrefix) {
       return `${accountInfo.storagePrefix}${baseKey}`;
@@ -68,6 +70,6 @@ export function useAccountStorage(key: string) {
     setItem,
     removeItem,
     getStorageKey,
-    accountInfo
+    accountInfo,
   };
 }

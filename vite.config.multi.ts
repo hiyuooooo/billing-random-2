@@ -6,8 +6,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
-        'sadhana-server': path.resolve(__dirname, "server/sadhana-server.ts"),
-        'himalaya-server': path.resolve(__dirname, "server/himalaya-server.ts"),
+        "sadhana-server": path.resolve(__dirname, "server/sadhana-server.ts"),
+        "himalaya-server": path.resolve(__dirname, "server/himalaya-server.ts"),
       },
       name: "multi-server",
       formats: ["cjs"],
@@ -18,10 +18,22 @@ export default defineConfig({
     rollupOptions: {
       external: [
         // Node.js built-ins
-        "fs", "path", "url", "http", "https", "os", "crypto",
-        "stream", "util", "events", "buffer", "querystring", "child_process",
+        "fs",
+        "path",
+        "url",
+        "http",
+        "https",
+        "os",
+        "crypto",
+        "stream",
+        "util",
+        "events",
+        "buffer",
+        "querystring",
+        "child_process",
         // External dependencies
-        "express", "cors",
+        "express",
+        "cors",
       ],
       output: {
         format: "cjs",

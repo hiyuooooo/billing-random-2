@@ -1,7 +1,7 @@
-import React from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Building2, Globe } from 'lucide-react';
-import { useAccountDetection } from '@/hooks/use-account-detection';
+import React from "react";
+import { Badge } from "@/components/ui/badge";
+import { Building2, Globe } from "lucide-react";
+import { useAccountDetection } from "@/hooks/use-account-detection";
 
 export function AccountIndicator() {
   const { accountInfo, isLoading } = useAccountDetection();
@@ -26,18 +26,18 @@ export function AccountIndicator() {
 
   const getAccountColor = (accountId: string) => {
     switch (accountId) {
-      case 'sadhana-agency':
-        return 'bg-blue-500 hover:bg-blue-600';
-      case 'himalaya-traders':
-        return 'bg-green-500 hover:bg-green-600';
+      case "sadhana-agency":
+        return "bg-blue-500 hover:bg-blue-600";
+      case "himalaya-traders":
+        return "bg-green-500 hover:bg-green-600";
       default:
-        return 'bg-gray-500 hover:bg-gray-600';
+        return "bg-gray-500 hover:bg-gray-600";
     }
   };
 
   return (
     <div className="flex items-center gap-2">
-      <Badge 
+      <Badge
         className={`${getAccountColor(accountInfo.accountId)} text-white font-medium`}
         variant="secondary"
       >
@@ -59,22 +59,26 @@ export function AccountBanner() {
 
   const getAccountGradient = (accountId: string) => {
     switch (accountId) {
-      case 'sadhana-agency':
-        return 'from-blue-50 to-blue-100 border-blue-200';
-      case 'himalaya-traders':
-        return 'from-green-50 to-green-100 border-green-200';
+      case "sadhana-agency":
+        return "from-blue-50 to-blue-100 border-blue-200";
+      case "himalaya-traders":
+        return "from-green-50 to-green-100 border-green-200";
       default:
-        return 'from-gray-50 to-gray-100 border-gray-200';
+        return "from-gray-50 to-gray-100 border-gray-200";
     }
   };
 
   return (
-    <div className={`bg-gradient-to-r ${getAccountGradient(accountInfo.accountId)} border-b px-4 py-2`}>
+    <div
+      className={`bg-gradient-to-r ${getAccountGradient(accountInfo.accountId)} border-b px-4 py-2`}
+    >
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Building2 className="h-5 w-5 text-gray-600" />
           <div>
-            <h2 className="font-semibold text-gray-800">{accountInfo.accountName}</h2>
+            <h2 className="font-semibold text-gray-800">
+              {accountInfo.accountName}
+            </h2>
             <p className="text-sm text-gray-600">
               Running on http://localhost:{accountInfo.port}
             </p>
