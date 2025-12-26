@@ -178,7 +178,7 @@ export default function Reports() {
 
   // Filter bill reports based on mismatch threshold
   const mismatchReports = useMemo(() => {
-    return bills.filter((bill) => Math.abs(bill.difference) > 25);
+    return bills.filter((bill) => Math.abs(bill.difference) > 20);
   }, [bills]);
 
   const filteredBillReports = useMemo(() => {
@@ -263,7 +263,7 @@ export default function Reports() {
       "Expected Total": bill.expectedTotal,
       Difference: bill.difference,
       Status:
-        Math.abs(bill.difference) > 25
+        Math.abs(bill.difference) > 20
           ? bill.difference > 0
             ? "Under"
             : "Over"
@@ -739,7 +739,7 @@ export default function Reports() {
               <div className="flex items-center space-x-2">
                 <AlertTriangle className="h-4 w-4 text-orange-500" />
                 <div>
-                  <p className="text-sm font-medium">Mismatches (Above ₹25)</p>
+                  <p className="text-sm font-medium">Mismatches (Above ₹20)</p>
                   <p className="text-2xl font-bold">{mismatchReports.length}</p>
                 </div>
               </div>
@@ -847,7 +847,7 @@ export default function Reports() {
                 <CardTitle>Billing Report</CardTitle>
                 <CardDescription>
                   Expected vs Generated totals with mismatch highlighting (Above
-                  ₹25 difference)
+                  ₹20 difference)
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -876,7 +876,7 @@ export default function Reports() {
                           key={`billing-report-${bill.id}-${index}`}
                           className={cn(
                             "border-b hover:bg-accent/50 transition-colors",
-                            Math.abs(bill.difference) > 25 &&
+                            Math.abs(bill.difference) > 20 &&
                               "bg-red-50 border-red-200",
                           )}
                         >
@@ -900,12 +900,12 @@ export default function Reports() {
                           <td className="p-3">
                             <Badge
                               variant={
-                                Math.abs(bill.difference) > 25
+                                Math.abs(bill.difference) > 20
                                   ? "destructive"
                                   : "secondary"
                               }
                             >
-                              {Math.abs(bill.difference) > 30
+                              {Math.abs(bill.difference) > 20
                                 ? `${bill.difference > 0 ? "Under" : "Over"} ₹${Math.abs(bill.difference)}`
                                 : "Within Range"}
                             </Badge>
@@ -925,7 +925,7 @@ export default function Reports() {
               <div>
                 <h3 className="text-lg font-semibold">Billing Mismatches</h3>
                 <p className="text-sm text-muted-foreground">
-                  Bills with differences greater than ₹25 between expected and
+                  Bills with differences greater than ₹20 between expected and
                   generated totals
                 </p>
               </div>
@@ -947,7 +947,7 @@ export default function Reports() {
                       No Mismatches Found
                     </h3>
                     <p className="text-sm">
-                      All bills are within the ±₹25 tolerance range
+                      All bills are within the ±₹20 tolerance range
                     </p>
                   </div>
                 </CardContent>

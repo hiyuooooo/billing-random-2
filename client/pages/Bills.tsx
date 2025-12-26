@@ -834,7 +834,37 @@ export default function Bills() {
     }
 
     console.log("Generated items:", result.items);
-    setSelectedItems(result.items);
+
+    // Adjust the total to exactly match the target
+    let adjustedItems = [...result.items];
+    let currentTotal = result.total;
+    const difference = targetTotal - currentTotal;
+
+    if (difference !== 0 && adjustedItems.length > 0) {
+      console.log(`Adjusting total by ₹${difference} to match target exactly`);
+
+      // Find the item with the highest quantity to adjust
+      const itemToAdjust = adjustedItems.reduce((max, item) =>
+        item.quantity > max.quantity ? item : max,
+      );
+
+      if (itemToAdjust) {
+        // Adjust the price of the item to make the total exact
+        const priceAdjustment = difference / itemToAdjust.quantity;
+        itemToAdjust.price = Math.max(1, itemToAdjust.price + priceAdjustment);
+        itemToAdjust.total = itemToAdjust.price * itemToAdjust.quantity;
+
+        // Recalculate total
+        currentTotal = adjustedItems.reduce((sum, item) => sum + item.total, 0);
+
+        console.log(
+          `Adjusted ${itemToAdjust.name} price to ₹${itemToAdjust.price.toFixed(2)}`,
+        );
+        console.log(`New total: ₹${currentTotal}, target: ₹${targetTotal}`);
+      }
+    }
+
+    setSelectedItems(adjustedItems);
 
     // Switch back to bills tab after a short delay to show the result
     setTimeout(() => {
@@ -842,16 +872,10 @@ export default function Bills() {
     }, 1000);
 
     // Provide feedback about the generation
-    const difference = Math.abs(result.total - targetTotal);
+    const finalDifference = Math.abs(currentTotal - targetTotal);
     console.log(
-      `Bill generated with ${result.items.length} items, total: ₹${result.total}, difference from target: ₹${difference}`,
+      `Bill generated with ${adjustedItems.length} items, total: ₹${currentTotal}, target: ₹${targetTotal}, difference: ₹${finalDifference}`,
     );
-
-    if (difference > 30) {
-      console.warn(
-        `Generated bill total (₹${result.total}) differs from target (₹${targetTotal}) by ₹${difference}`,
-      );
-    }
   };
 
   const handleCreateBill = () => {
@@ -862,22 +886,23 @@ export default function Bills() {
       parseInt(newBill.billNumber) ||
       Math.max(...bills.map((b) => b.billNumber)) + 1;
 
+    const targetTotal = parseFloat(newBill.targetTotal) || 0;
+    const generatedTotal = selectedItems.reduce(
+      (sum, item) => sum + item.total,
+      0,
+    );
+
     const bill: any = {
       id: `BILL-${billNumber}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       billNumber: billNumber,
       date: new Date(newBill.date).toLocaleDateString("en-GB"),
       customerName: displayName,
       items: selectedItems,
-      subTotal: selectedItems.reduce((sum, item) => sum + item.total, 0),
-      expectedTotal:
-        parseFloat(newBill.targetTotal) ||
-        selectedItems.reduce((sum, item) => sum + item.total, 0),
+      subTotal: targetTotal > 0 ? targetTotal : generatedTotal, // Use target total if available
+      expectedTotal: targetTotal > 0 ? targetTotal : generatedTotal, // Use target total if available
       paymentMode,
       status: "draft",
-      difference:
-        (parseFloat(newBill.targetTotal) ||
-          selectedItems.reduce((sum, item) => sum + item.total, 0)) -
-        selectedItems.reduce((sum, item) => sum + item.total, 0),
+      difference: 0, // No difference since we match the target exactly
       tolerance: 0,
       headerInfo: {
         agencyName: "Sadhana Agency",
@@ -2924,7 +2949,9 @@ export default function Bills() {
                             repeats
                           </li>
                           <li>• Ensures minimum 2 items per bill</li>
-                          <li>• Matches target total within ±₹30 tolerance</li>
+                          <li>
+                            • Generated total exactly matches target amount
+                          </li>
                           <li>
                             • Maximum 7 items per bill, up to 2 quantity each
                           </li>

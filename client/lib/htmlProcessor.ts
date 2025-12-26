@@ -77,14 +77,16 @@ export class HtmlProcessor {
    */
   addHeaderInfo(config: HeaderConfig): this {
     const headerDiv = this.doc.querySelector(".header");
-    if (!headerDiv) return this;
+    if (!headerDiv) {
+      return this;
+    }
 
     // Remove existing address lines to prevent duplicates
     headerDiv
       .querySelectorAll(".address-line, .phone-line, .gst-line")
       .forEach((el) => el.remove());
 
-    if (config.showAddress) {
+    if (config.showAddress && config.address.trim()) {
       const addressP = this.doc.createElement("p");
       addressP.className = "address-line";
       addressP.style.fontSize = "14px";
@@ -94,7 +96,7 @@ export class HtmlProcessor {
       headerDiv.appendChild(addressP); // Similar to header_div.append() in BeautifulSoup
     }
 
-    if (config.showPhone) {
+    if (config.showPhone && config.phone.trim()) {
       const phoneP = this.doc.createElement("p");
       phoneP.className = "phone-line";
       phoneP.style.fontSize = "14px";
@@ -104,7 +106,7 @@ export class HtmlProcessor {
       headerDiv.appendChild(phoneP);
     }
 
-    if (config.showGST) {
+    if (config.showGST && config.gst.trim()) {
       const gstP = this.doc.createElement("p");
       gstP.className = "gst-line";
       gstP.style.fontSize = "14px";
@@ -123,14 +125,16 @@ export class HtmlProcessor {
    */
   addFooterDeclaration(config: FooterConfig): this {
     const body = this.doc.querySelector("body");
-    if (!body) return this;
+    if (!body) {
+      return this;
+    }
 
     // Remove existing footer notes to prevent duplicates
     body
       .querySelectorAll(".footer-declaration, .custom-footer-note")
       .forEach((el) => el.remove());
 
-    if (config.showDeclaration) {
+    if (config.showDeclaration && config.declaration.trim()) {
       const footerDiv = this.doc.createElement("div");
       footerDiv.className = "footer-declaration";
       footerDiv.style.cssText =
@@ -139,7 +143,11 @@ export class HtmlProcessor {
       body.appendChild(footerDiv); // Similar to soup.body.append() in BeautifulSoup
     }
 
-    if (config.showCustomNote && config.customNote) {
+    if (
+      config.showCustomNote &&
+      config.customNote &&
+      config.customNote.trim()
+    ) {
       const customNoteDiv = this.doc.createElement("div");
       customNoteDiv.className = "custom-footer-note";
       customNoteDiv.style.cssText =

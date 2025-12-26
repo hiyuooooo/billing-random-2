@@ -4,21 +4,46 @@
   "type": "module",
   "pkg": {
     "assets": [
-      "dist/spa/*"
+      "dist/spa/**/*"
     ],
     "scripts": [
       "dist/server/**/*.js"
-    ]
+    ],
+    "targets": [
+      "node18-win-x64",
+      "node18-linux-x64",
+      "node18-macos-x64"
+    ],
+    "outputPath": "executables"
   },
   "scripts": {
     "dev": "vite",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build",
     "build:server": "vite build --config vite.config.server.ts",
-    "start": "node dist/server/node-build.mjs",
+    "build:multi-server": "vite build --config vite.config.multi.ts",
+    "start": "node dist/server/node-build.js",
     "test": "vitest --run",
     "format.fix": "prettier --write .",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "pack:prepare": "npm run build",
+    "pack:exe": "npm run pack:prepare && pkg dist/server/node-build.js --out-path executables",
+    "pack:exe:win": "npm run pack:prepare && pkg dist/server/node-build.js --targets node18-win-x64 --out-path executables",
+    "pack:exe:linux": "npm run pack:prepare && pkg dist/server/node-build.js --targets node18-linux-x64 --out-path executables",
+    "pack:exe:mac": "npm run pack:prepare && pkg dist/server/node-build.js --targets node18-macos-x64 --out-path executables",
+    "pack:exe:all": "npm run pack:prepare && pkg dist/server/node-build.js --targets node18-win-x64,node18-linux-x64,node18-macos-x64 --out-path executables",
+    "build:web": "npm run build && npm run optimize:web",
+    "optimize:web": "echo 'Web build optimized for deployment'",
+    "preview": "npm run build && npm start",
+    "setup": "node install.js",
+    "build:all": "node build.js",
+    "build:exe": "node build.js exe",
+    "build:web-only": "node build.js web",
+    "build:portable": "node scripts/build-executable.js",
+    "dev:sadhana": "tsx server/sadhana-server.ts",
+    "dev:himalaya": "tsx server/himalaya-server.ts",
+    "start:sadhana": "node dist/multi-server/sadhana-server.js",
+    "start:himalaya": "node dist/multi-server/himalaya-server.js"
   },
   "dependencies": {
     "dotenv": "^17.2.0",
@@ -81,6 +106,7 @@
     "input-otp": "^1.2.4",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
+    "pkg": "^5.8.1",
     "postcss": "^8.5.6",
     "prettier": "^3.5.3",
     "react": "^18.3.1",

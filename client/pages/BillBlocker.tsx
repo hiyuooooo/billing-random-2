@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { useAccount } from "@/components/AccountManager";
+import { useBill } from "@/components/BillContext";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,12 +27,23 @@ import { cn } from "@/lib/utils";
 
 export default function BillBlocker() {
   const { activeAccount } = useAccount();
+  const { bills } = useBill();
 
   const [startingBillNumber, setStartingBillNumber] = useState(() => {
     if (!activeAccount) return "1001";
     try {
       const storageKey = `billBlocker_startingNumber_${activeAccount.id}`;
-      return localStorage.getItem(storageKey) || "1001";
+      const saved = localStorage.getItem(storageKey);
+      if (saved) return saved;
+
+      // If no saved value, use highest bill number + 1
+      if (bills.length > 0) {
+        const highestBillNumber = Math.max(
+          ...bills.map((bill) => bill.billNumber),
+        );
+        return (highestBillNumber + 1).toString();
+      }
+      return "1001";
     } catch {
       return "1001";
     }
@@ -59,6 +71,23 @@ export default function BillBlocker() {
       }
     }
   }, [startingBillNumber, activeAccount]);
+
+  // Auto-update starting bill number when bills change (but only if user hasn't manually set it)
+  useEffect(() => {
+    if (activeAccount && bills.length > 0) {
+      const storageKey = `billBlocker_startingNumber_${activeAccount.id}`;
+      const savedValue = localStorage.getItem(storageKey);
+
+      // Only auto-update if no manual value was saved
+      if (!savedValue) {
+        const highestBillNumber = Math.max(
+          ...bills.map((bill) => bill.billNumber),
+        );
+        const nextBillNumber = highestBillNumber + 1;
+        setStartingBillNumber(nextBillNumber.toString());
+      }
+    }
+  }, [bills, activeAccount]);
 
   useEffect(() => {
     if (activeAccount) {
@@ -314,9 +343,12 @@ export default function BillBlocker() {
                   type="number"
                   value={startingBillNumber}
                   onChange={(e) => setStartingBillNumber(e.target.value)}
-                  placeholder="Enter starting bill number"
+                  placeholder="Auto-set to next available"
                   className="w-48"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Auto-set to highest bill + 1, but editable
+                </p>
               </div>
               <div className="text-sm text-muted-foreground">
                 <p>

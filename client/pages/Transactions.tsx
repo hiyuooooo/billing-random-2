@@ -170,7 +170,7 @@ export default function Transactions() {
       deleteAllTransactions();
     }
   };
-  const { generateBillsFromTransactions } = useBill();
+  const { generateBillsFromTransactions, bills } = useBill();
   const { getUnblockedStock, reduceStock } = useStock();
   const { activeAccount, accounts, setActiveAccount } = useAccount();
 
@@ -204,6 +204,24 @@ export default function Transactions() {
   const [isGenerateBillsOpen, setIsGenerateBillsOpen] = useState(false);
   const [startingBillNumber, setStartingBillNumber] = useState("");
   const [billsToBlock, setBillsToBlock] = useState("");
+
+  // Set default starting bill number to highest existing bill number + 1
+  useEffect(() => {
+    if (bills.length > 0) {
+      const highestBillNumber = Math.max(
+        ...bills.map((bill) => bill.billNumber),
+      );
+      const nextBillNumber = highestBillNumber + 1;
+
+      // Only set if startingBillNumber is empty (don't override manual changes)
+      if (!startingBillNumber) {
+        setStartingBillNumber(nextBillNumber.toString());
+      }
+    } else if (!startingBillNumber) {
+      // If no bills exist, start with 1001 as default
+      setStartingBillNumber("1001");
+    }
+  }, [bills, activeAccount]); // Reset when account changes too
 
   // Load blocked bills from Bill Blocker when component mounts
   const loadBlockedBills = () => {
@@ -1173,8 +1191,12 @@ export default function Transactions() {
                   type="number"
                   value={startingBillNumber}
                   onChange={(e) => setStartingBillNumber(e.target.value)}
-                  placeholder="Enter starting bill number (e.g., 1001)"
+                  placeholder="Auto-set to next available (editable)"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Automatically set to highest bill number + 1, but you can
+                  change it manually
+                </p>
               </div>
 
               <div className="space-y-2">

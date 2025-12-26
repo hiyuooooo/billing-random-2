@@ -5,10 +5,10 @@ import path from "path";
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, "server/node-build.ts"),
+      entry: path.resolve(__dirname, "server/pkg-entry.ts"),
       name: "server",
-      fileName: "production",
-      formats: ["es"],
+      fileName: "node-build",
+      formats: ["cjs"],
     },
     outDir: "dist/server",
     target: "node22",
@@ -34,8 +34,8 @@ export default defineConfig({
         "cors",
       ],
       output: {
-        format: "es",
-        entryFileNames: "[name].mjs",
+        format: "cjs",
+        entryFileNames: "node-build.js",
       },
     },
     minify: false, // Keep readable for debugging

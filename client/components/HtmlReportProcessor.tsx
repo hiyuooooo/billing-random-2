@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,24 +23,70 @@ import {
   Code,
 } from "lucide-react";
 import { useBill } from "@/components/BillContext";
+import { useAccount } from "@/components/AccountManager";
 import { HtmlProcessor, demonstratePythonWorkflow } from "@/lib/htmlProcessor";
 
 export default function HtmlReportProcessor() {
   const { bills } = useBill();
-  const [headerConfig, setHeaderConfig] = useState({
-    address: "Shop No. 12, Main Bazaar, Indore, MP - 452001",
-    phone: "+91 9876543210",
-    gst: "23ABCDE1234F1Z5",
-    showAddress: true,
-    showPhone: true,
-    showGST: true,
+  const { activeAccount } = useAccount();
+
+  // Load saved settings from localStorage or use empty defaults
+  const [headerConfig, setHeaderConfig] = useState(() => {
+    if (!activeAccount)
+      return {
+        address: "",
+        phone: "",
+        gst: "",
+        showAddress: true,
+        showPhone: true,
+        showGST: true,
+      };
+
+    try {
+      const storageKey = `htmlProcessor_header_${activeAccount.id}`;
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (error) {
+      console.warn("Failed to load header config:", error);
+    }
+
+    return {
+      address: "",
+      phone: "",
+      gst: "",
+      showAddress: true,
+      showPhone: true,
+      showGST: true,
+    };
   });
 
-  const [footerConfig, setFooterConfig] = useState({
-    declaration: "We are under composition scheme under GST.",
-    showDeclaration: true,
-    customNote: "",
-    showCustomNote: false,
+  const [footerConfig, setFooterConfig] = useState(() => {
+    if (!activeAccount)
+      return {
+        declaration: "",
+        showDeclaration: true,
+        customNote: "",
+        showCustomNote: false,
+      };
+
+    try {
+      const storageKey = `htmlProcessor_footer_${activeAccount.id}`;
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (error) {
+      console.warn("Failed to load footer config:", error);
+    }
+
+    return {
+      declaration: "",
+      showDeclaration: true,
+      customNote: "",
+      showCustomNote: false,
+    };
   });
 
   const [processingConfig, setProcessingConfig] = useState({
@@ -51,6 +97,69 @@ export default function HtmlReportProcessor() {
   });
 
   const [processedHtml, setProcessedHtml] = useState("");
+
+  // Save header config to localStorage whenever it changes
+  useEffect(() => {
+    if (activeAccount) {
+      try {
+        const storageKey = `htmlProcessor_header_${activeAccount.id}`;
+        localStorage.setItem(storageKey, JSON.stringify(headerConfig));
+      } catch (error) {
+        console.warn("Failed to save header config:", error);
+      }
+    }
+  }, [headerConfig, activeAccount]);
+
+  // Save footer config to localStorage whenever it changes
+  useEffect(() => {
+    if (activeAccount) {
+      try {
+        const storageKey = `htmlProcessor_footer_${activeAccount.id}`;
+        localStorage.setItem(storageKey, JSON.stringify(footerConfig));
+      } catch (error) {
+        console.warn("Failed to save footer config:", error);
+      }
+    }
+  }, [footerConfig, activeAccount]);
+
+  // Load settings when account changes
+  useEffect(() => {
+    if (activeAccount) {
+      try {
+        const headerKey = `htmlProcessor_header_${activeAccount.id}`;
+        const footerKey = `htmlProcessor_footer_${activeAccount.id}`;
+
+        const savedHeader = localStorage.getItem(headerKey);
+        const savedFooter = localStorage.getItem(footerKey);
+
+        if (savedHeader) {
+          setHeaderConfig(JSON.parse(savedHeader));
+        } else {
+          setHeaderConfig({
+            address: "",
+            phone: "",
+            gst: "",
+            showAddress: true,
+            showPhone: true,
+            showGST: true,
+          });
+        }
+
+        if (savedFooter) {
+          setFooterConfig(JSON.parse(savedFooter));
+        } else {
+          setFooterConfig({
+            declaration: "",
+            showDeclaration: true,
+            customNote: "",
+            showCustomNote: false,
+          });
+        }
+      } catch (error) {
+        console.warn("Failed to load processor configs:", error);
+      }
+    }
+  }, [activeAccount?.id]);
 
   // HTML manipulation using BeautifulSoup-like utilities
   const processHtmlContent = (htmlContent: string): string => {
@@ -78,6 +187,8 @@ export default function HtmlReportProcessor() {
           .items-table th { background-color: #f2f2f2; }
           .total-row { font-weight: bold; background-color: #f9f9f9; }
           .grand-total { font-size: 18px; font-weight: bold; text-align: center; margin-top: 30px; padding: 15px; background-color: #e7f3ff; }
+          .address-line, .phone-line, .gst-line { font-size: 14px; margin-top: 5px; color: #666; }
+          .footer-declaration, .custom-footer-note { text-align: center; margin-top: 20px; font-size: 14px; color: #555; }
           @media print {
             .bill-section {
               page-break-after: auto;
@@ -90,6 +201,7 @@ export default function HtmlReportProcessor() {
         <div class="header">
           <h2>Mega Sale Report</h2>
           <h3>Sadhana Agency</h3>
+          <!-- Header info will be added by processor -->
         </div>
 
         ${bills
@@ -291,7 +403,7 @@ export default function HtmlReportProcessor() {
                             address: e.target.value,
                           }))
                         }
-                        placeholder="Enter agency address..."
+                        placeholder="Enter agency address (will be saved in memory)..."
                         rows={2}
                       />
                     </div>
@@ -321,7 +433,7 @@ export default function HtmlReportProcessor() {
                             phone: e.target.value,
                           }))
                         }
-                        placeholder="Enter phone number..."
+                        placeholder="Enter phone number (will be saved)..."
                       />
                     </div>
                   )}
@@ -352,7 +464,7 @@ export default function HtmlReportProcessor() {
                             gst: e.target.value,
                           }))
                         }
-                        placeholder="Enter GST number..."
+                        placeholder="Enter GST number (will be saved)..."
                       />
                     </div>
                   )}
@@ -411,7 +523,7 @@ export default function HtmlReportProcessor() {
                             declaration: e.target.value,
                           }))
                         }
-                        placeholder="Enter GST declaration..."
+                        placeholder="Enter GST declaration (will be saved)..."
                         rows={2}
                       />
                     </div>
@@ -441,7 +553,7 @@ export default function HtmlReportProcessor() {
                             customNote: e.target.value,
                           }))
                         }
-                        placeholder="Enter custom note..."
+                        placeholder="Enter custom note (will be saved)..."
                         rows={2}
                       />
                     </div>
